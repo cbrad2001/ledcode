@@ -8,20 +8,17 @@
 # if KERNELRELEASE is defined, we've been invoked from the
 # kernel build system and can use its language.
 ifneq (${KERNELRELEASE},)
-	obj-m := testdriver.o demo_printk.o demo_miscdrv.o demo_miscdrv_sol.o demo_paramdrv.o  
-	obj-m += demo_procdrv.o demo_seqfile_procdrv.o demo_ledtrig.o echo.o demo_misc_template.o 
+	obj-m := morseLED.o
 
 # Otherwise we were called directly from the command line.
 # Invoke the kernel build system.
 else
-	KERNEL_SOURCE := ~/cmpt433/work/bb-kernel/KERNEL/
-	#KERNEL_SOURCE := /usr/src/linux-headers-4.4.12-ti-r31/
+	KERNEL_SOURCE := ~/cmpt433/work/linux/
 	PWD := $(shell pwd)
 
 	# SETUP COMPILER FOR SPECIFIC COMPILER
 	# Linux kernel 5.4
-	CC=${HOME}/cmpt433/work/bb-kernel/dl/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
-	BUILD=bone13
+	CC=arm-linux-gnueabihf-
 	CORES=4
 	PUBLIC_DRIVER_PWD=~/cmpt433/public/drivers
 
