@@ -7,7 +7,19 @@
 #include <linux/miscdevice.h>		// for misc-driver calls.
 #include <linux/fs.h>
 #include <linux/delay.h>
-//#error Are we building this?
+#include <linux/uaccess.h>
+#include <linux/kernel.h>
+#include <linux/leds.h>	
+//#error Are we building this?	//debugging
+
+// info:
+
+// "dot" is the basic unit of time; we’ll use 200 ms.
+// "dash" is three dot-times long.
+//  dot/dash is separated by one dot-time. During this time the LED is off.
+// Two letters in a message are separated by three dot-times. During this time the LED is off.
+// Each break between words is equal to seven dot-times total (no additional 3 dot-time inter-character delay).
+
 
 #define MY_DEVICE_FILE  "demo_ledtrig"
 
@@ -45,8 +57,7 @@ static void led_unregister(void)
 /******************************************************
  * Callbacks
  ******************************************************/
-static ssize_t my_write(struct file* file, const char *buff,
-		size_t count, loff_t* ppos)
+static ssize_t my_write(struct file* file, const char *buff, size_t count, loff_t* ppos)
 {
 	int i;
 	printk(KERN_INFO "demo_ledtrig: Flashing %d times for string.\n", count);
@@ -56,8 +67,20 @@ static ssize_t my_write(struct file* file, const char *buff,
 		my_led_blink();
 	}
 
+
+	//TODO
+
 	// Return # bytes actually written.
 	return count;
+}
+
+static ssize_t my_read(struct file *file, char *buf, size_t count, loff_t *f_pos)
+{
+	// TODO:
+
+
+	return 0;
+
 }
 
 
@@ -68,6 +91,7 @@ static ssize_t my_write(struct file* file, const char *buff,
 struct file_operations my_fops = {
 	.owner    =  THIS_MODULE,
 	.write    =  my_write,
+	.read 	  =  my_read,
 };
 
 // Character Device info for the Kernel:
@@ -109,6 +133,6 @@ static void __exit my_exit(void)
 module_init(my_init);
 module_exit(my_exit);
 
-MODULE_AUTHOR("Brian Fraser");
+MODULE_AUTHOR("cba52 & jwa359");
 MODULE_DESCRIPTION("A simple test driver");
 MODULE_LICENSE("GPL");

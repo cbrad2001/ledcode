@@ -13,7 +13,7 @@ ifneq (${KERNELRELEASE},)
 # Otherwise we were called directly from the command line.
 # Invoke the kernel build system.
 else
-	KERNEL_SOURCE := ~/cmpt433/work/linux/
+	KERNEL_SOURCE := ~/cmpt433/work/linux
 	PWD := $(shell pwd)
 
 	# SETUP COMPILER FOR SPECIFIC COMPILER
