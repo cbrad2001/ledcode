@@ -21,7 +21,7 @@
 // Each break between words is equal to seven dot-times total (no additional 3 dot-time inter-character delay).
 
 
-#define MY_DEVICE_FILE  "demo_ledtrig"
+#define MY_DEVICE_FILE "morse-code"
 
 /******************************************************
  * LED
