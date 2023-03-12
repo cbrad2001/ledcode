@@ -1,10 +1,8 @@
-cmd_/home/cba52/cmpt433/public/as4/morseLED.mod.o := arm-linux-gnueabihf-gcc -Wp,-MMD,/home/cba52/cmpt433/public/as4/.morseLED.mod.o.d -nostdinc -isystem /usr/lib/gcc-cross/arm-linux-gnueabihf/10/include -I./arch/arm/include -I./arch/arm/include/generated  -I./include -I./arch/arm/include/uapi -I./arch/arm/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -include ./include/linux/compiler_types.h -D__KERNEL__ -mlittle-endian -fmacro-prefix-map=./= -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=implicit-function-declaration -Werror=implicit-int -Werror=return-type -Wno-format-security -std=gnu89 -fno-dwarf2-cfi-asm -fno-ipa-sra -msoft-float -mabi=aapcs-linux -mfpu=vfp -funwind-tables -marm -Wa,-mno-warn-deprecated -D__LINUX_ARM_ARCH__=7 -march=armv7-a -Uarm -fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -Wno-format-overflow -Wno-address-of-packed-member -O2 -fno-allow-store-data-races -Wframe-larger-than=1024 -fstack-protector-strong -Wimplicit-fallthrough -Wno-unused-but-set-variable -Wno-unused-const-variable -fomit-frame-pointer -Wdeclaration-after-statement -Wvla -Wno-pointer-sign -Wno-stringop-truncation -Wno-zero-length-bounds -Wno-array-bounds -Wno-stringop-overflow -Wno-restrict -Wno-maybe-uninitialized -fno-strict-overflow -fno-stack-check -fconserve-stack -Werror=date-time -Werror=incompatible-pointer-types -Werror=designated-init -Wno-packed-not-aligned  -DMODULE  -DKBUILD_BASENAME='"morseLED.mod"' -DKBUILD_MODNAME='"morseLED"' -c -o /home/cba52/cmpt433/public/as4/morseLED.mod.o /home/cba52/cmpt433/public/as4/morseLED.mod.c
+cmd_/home/cba52/cmpt433/public/as4/morse-code.o := arm-linux-gnueabihf-gcc -Wp,-MMD,/home/cba52/cmpt433/public/as4/.morse-code.o.d -nostdinc -isystem /usr/lib/gcc-cross/arm-linux-gnueabihf/10/include -I./arch/arm/include -I./arch/arm/include/generated  -I./include -I./arch/arm/include/uapi -I./arch/arm/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -include ./include/linux/compiler_types.h -D__KERNEL__ -mlittle-endian -fmacro-prefix-map=./= -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=implicit-function-declaration -Werror=implicit-int -Werror=return-type -Wno-format-security -std=gnu89 -fno-dwarf2-cfi-asm -fno-ipa-sra -msoft-float -mabi=aapcs-linux -mfpu=vfp -funwind-tables -marm -Wa,-mno-warn-deprecated -D__LINUX_ARM_ARCH__=7 -march=armv7-a -Uarm -fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -Wno-format-overflow -Wno-address-of-packed-member -O2 -fno-allow-store-data-races -Wframe-larger-than=1024 -fstack-protector-strong -Wimplicit-fallthrough -Wno-unused-but-set-variable -Wno-unused-const-variable -fomit-frame-pointer -Wdeclaration-after-statement -Wvla -Wno-pointer-sign -Wno-stringop-truncation -Wno-zero-length-bounds -Wno-array-bounds -Wno-stringop-overflow -Wno-restrict -Wno-maybe-uninitialized -fno-strict-overflow -fno-stack-check -fconserve-stack -Werror=date-time -Werror=incompatible-pointer-types -Werror=designated-init -Wno-packed-not-aligned  -DMODULE  -DKBUILD_BASENAME='"morse_code"' -DKBUILD_MODNAME='"morse_code"' -c -o /home/cba52/cmpt433/public/as4/morse-code.o /home/cba52/cmpt433/public/as4/morse-code.c
 
-source_/home/cba52/cmpt433/public/as4/morseLED.mod.o := /home/cba52/cmpt433/public/as4/morseLED.mod.c
+source_/home/cba52/cmpt433/public/as4/morse-code.o := /home/cba52/cmpt433/public/as4/morse-code.c
 
-deps_/home/cba52/cmpt433/public/as4/morseLED.mod.o := \
-    $(wildcard include/config/module/unload.h) \
-    $(wildcard include/config/retpoline.h) \
+deps_/home/cba52/cmpt433/public/as4/morse-code.o := \
   include/linux/kconfig.h \
     $(wildcard include/config/cc/version/text.h) \
     $(wildcard include/config/cpu/big/endian.h) \
@@ -17,6 +15,7 @@ deps_/home/cba52/cmpt433/public/as4/morseLED.mod.o := \
   include/linux/compiler_attributes.h \
   include/linux/compiler-gcc.h \
     $(wildcard include/config/arm64.h) \
+    $(wildcard include/config/retpoline.h) \
     $(wildcard include/config/arch/use/builtin/bswap.h) \
     $(wildcard include/config/kcov.h) \
   include/linux/module.h \
@@ -38,6 +37,7 @@ deps_/home/cba52/cmpt433/public/as4/morseLED.mod.o := \
     $(wildcard include/config/ftrace/mcount/record.h) \
     $(wildcard include/config/kprobes.h) \
     $(wildcard include/config/have/static/call/inline.h) \
+    $(wildcard include/config/module/unload.h) \
     $(wildcard include/config/constructors.h) \
     $(wildcard include/config/function/error/injection.h) \
   include/linux/list.h \
@@ -583,13 +583,408 @@ deps_/home/cba52/cmpt433/public/as4/morseLED.mod.o := \
     $(wildcard include/config/have/mod/arch/specific.h) \
     $(wildcard include/config/modules/use/elf/rel.h) \
     $(wildcard include/config/modules/use/elf/rela.h) \
-  include/linux/build-salt.h \
-    $(wildcard include/config/build/salt.h) \
-  include/linux/elfnote.h \
-  include/linux/vermagic.h \
-  include/generated/utsrelease.h \
-  arch/arm/include/asm/vermagic.h \
+  include/linux/miscdevice.h \
+  include/uapi/linux/major.h \
+  include/linux/device.h \
+    $(wildcard include/config/debug/devres.h) \
+    $(wildcard include/config/energy/model.h) \
+    $(wildcard include/config/generic/msi/irq/domain.h) \
+    $(wildcard include/config/pinctrl.h) \
+    $(wildcard include/config/generic/msi/irq.h) \
+    $(wildcard include/config/dma/ops.h) \
+    $(wildcard include/config/dma/declare/coherent.h) \
+    $(wildcard include/config/dma/cma.h) \
+    $(wildcard include/config/arch/has/sync/dma/for/device.h) \
+    $(wildcard include/config/arch/has/sync/dma/for/cpu.h) \
+    $(wildcard include/config/arch/has/sync/dma/for/cpu/all.h) \
+    $(wildcard include/config/dma/ops/bypass.h) \
+    $(wildcard include/config/of.h) \
+    $(wildcard include/config/devtmpfs.h) \
+    $(wildcard include/config/sysfs/deprecated.h) \
+  include/linux/dev_printk.h \
+  include/linux/ratelimit.h \
+  include/linux/sched.h \
+    $(wildcard include/config/virt/cpu/accounting/native.h) \
+    $(wildcard include/config/sched/info.h) \
+    $(wildcard include/config/schedstats.h) \
+    $(wildcard include/config/fair/group/sched.h) \
+    $(wildcard include/config/rt/group/sched.h) \
+    $(wildcard include/config/rt/mutexes.h) \
+    $(wildcard include/config/uclamp/task.h) \
+    $(wildcard include/config/uclamp/buckets/count.h) \
+    $(wildcard include/config/cgroup/sched.h) \
+    $(wildcard include/config/blk/dev/io/trace.h) \
+    $(wildcard include/config/psi.h) \
+    $(wildcard include/config/compat/brk.h) \
+    $(wildcard include/config/cgroups.h) \
+    $(wildcard include/config/blk/cgroup.h) \
+    $(wildcard include/config/stackprotector.h) \
+    $(wildcard include/config/arch/has/scaled/cputime.h) \
+    $(wildcard include/config/virt/cpu/accounting/gen.h) \
+    $(wildcard include/config/posix/cputimers.h) \
+    $(wildcard include/config/posix/cpu/timers/task/work.h) \
+    $(wildcard include/config/keys.h) \
+    $(wildcard include/config/sysvipc.h) \
+    $(wildcard include/config/detect/hung/task.h) \
+    $(wildcard include/config/io/uring.h) \
+    $(wildcard include/config/audit.h) \
+    $(wildcard include/config/auditsyscall.h) \
+    $(wildcard include/config/ubsan.h) \
+    $(wildcard include/config/ubsan/trap.h) \
+    $(wildcard include/config/block.h) \
+    $(wildcard include/config/task/xacct.h) \
+    $(wildcard include/config/cpusets.h) \
+    $(wildcard include/config/x86/cpu/resctrl.h) \
+    $(wildcard include/config/futex.h) \
+    $(wildcard include/config/compat.h) \
+    $(wildcard include/config/perf/events.h) \
+    $(wildcard include/config/rseq.h) \
+    $(wildcard include/config/task/delay/acct.h) \
+    $(wildcard include/config/fault/injection.h) \
+    $(wildcard include/config/latencytop.h) \
+    $(wildcard include/config/kunit.h) \
+    $(wildcard include/config/function/graph/tracer.h) \
+    $(wildcard include/config/bcache.h) \
+    $(wildcard include/config/vmap/stack.h) \
+    $(wildcard include/config/security.h) \
+    $(wildcard include/config/gcc/plugin/stackleak.h) \
+    $(wildcard include/config/x86/mce.h) \
+    $(wildcard include/config/arch/task/struct/on/stack.h) \
+    $(wildcard include/config/debug/rseq.h) \
+  include/uapi/linux/sched.h \
+  include/linux/pid.h \
+  include/linux/rculist.h \
+    $(wildcard include/config/prove/rcu/list.h) \
+  include/linux/sem.h \
+  include/uapi/linux/sem.h \
+  include/linux/ipc.h \
+  include/linux/rhashtable-types.h \
+  include/uapi/linux/ipc.h \
+  arch/arm/include/generated/uapi/asm/ipcbuf.h \
+  include/uapi/asm-generic/ipcbuf.h \
+  arch/arm/include/generated/uapi/asm/sembuf.h \
+  include/uapi/asm-generic/sembuf.h \
+  include/linux/shm.h \
+  include/uapi/linux/shm.h \
+  include/uapi/asm-generic/hugetlb_encode.h \
+  arch/arm/include/generated/uapi/asm/shmbuf.h \
+  include/uapi/asm-generic/shmbuf.h \
+  arch/arm/include/asm/shmparam.h \
+  include/linux/kcov.h \
+  include/uapi/linux/kcov.h \
+  include/linux/plist.h \
+    $(wildcard include/config/debug/plist.h) \
+  include/linux/hrtimer.h \
+    $(wildcard include/config/high/res/timers.h) \
+    $(wildcard include/config/time/low/res.h) \
+    $(wildcard include/config/timerfd.h) \
+  include/linux/hrtimer_defs.h \
+  include/linux/timerqueue.h \
+  include/linux/seccomp.h \
+    $(wildcard include/config/seccomp.h) \
+    $(wildcard include/config/have/arch/seccomp/filter.h) \
+    $(wildcard include/config/seccomp/filter.h) \
+    $(wildcard include/config/checkpoint/restore.h) \
+  include/uapi/linux/seccomp.h \
+  arch/arm/include/generated/asm/seccomp.h \
+  include/asm-generic/seccomp.h \
+  include/uapi/linux/unistd.h \
+  include/linux/resource.h \
+  include/uapi/linux/resource.h \
+  arch/arm/include/generated/uapi/asm/resource.h \
+  include/asm-generic/resource.h \
+  include/uapi/asm-generic/resource.h \
+  include/linux/latencytop.h \
+  include/linux/sched/prio.h \
+  include/linux/sched/types.h \
+  include/linux/signal_types.h \
+    $(wildcard include/config/old/sigaction.h) \
+  include/uapi/linux/signal.h \
+  arch/arm/include/asm/signal.h \
+  arch/arm/include/uapi/asm/signal.h \
+  include/uapi/asm-generic/signal-defs.h \
+  arch/arm/include/uapi/asm/sigcontext.h \
+  arch/arm/include/generated/uapi/asm/siginfo.h \
+  include/uapi/asm-generic/siginfo.h \
+  include/linux/task_io_accounting.h \
+    $(wildcard include/config/task/io/accounting.h) \
+  include/linux/posix-timers.h \
+  include/linux/alarmtimer.h \
+    $(wildcard include/config/rtc/class.h) \
+  include/linux/task_work.h \
+  include/uapi/linux/rseq.h \
+  include/linux/kcsan.h \
+  include/linux/energy_model.h \
+  include/linux/sched/cpufreq.h \
+    $(wildcard include/config/cpu/freq.h) \
+  include/linux/sched/topology.h \
+    $(wildcard include/config/sched/debug.h) \
+    $(wildcard include/config/sched/mc.h) \
+  include/linux/sched/idle.h \
+  include/linux/sched/sd_flags.h \
+  include/linux/ioport.h \
+    $(wildcard include/config/io/strict/devmem.h) \
+  include/linux/klist.h \
+  include/linux/pm.h \
+    $(wildcard include/config/vt/console/sleep.h) \
+    $(wildcard include/config/pm.h) \
+    $(wildcard include/config/pm/clk.h) \
+    $(wildcard include/config/pm/generic/domains.h) \
+  include/linux/overflow.h \
+  include/linux/device/bus.h \
+    $(wildcard include/config/acpi.h) \
+  include/linux/device/class.h \
+  include/linux/device/driver.h \
+  arch/arm/include/asm/device.h \
+    $(wildcard include/config/dmabounce.h) \
+    $(wildcard include/config/arm/dma/use/iommu.h) \
+    $(wildcard include/config/arch/omap.h) \
+  include/linux/pm_wakeup.h \
+  include/linux/fs.h \
+    $(wildcard include/config/read/only/thp/for/fs.h) \
+    $(wildcard include/config/fs/posix/acl.h) \
+    $(wildcard include/config/cgroup/writeback.h) \
+    $(wildcard include/config/ima.h) \
+    $(wildcard include/config/file/locking.h) \
+    $(wildcard include/config/fsnotify.h) \
+    $(wildcard include/config/fs/encryption.h) \
+    $(wildcard include/config/fs/verity.h) \
+    $(wildcard include/config/epoll.h) \
+    $(wildcard include/config/unicode.h) \
+    $(wildcard include/config/quota.h) \
+    $(wildcard include/config/fs/dax.h) \
+    $(wildcard include/config/mandatory/file/locking.h) \
+    $(wildcard include/config/migration.h) \
+  include/linux/wait_bit.h \
+  include/linux/kdev_t.h \
+  include/uapi/linux/kdev_t.h \
+  include/linux/dcache.h \
+  include/linux/rculist_bl.h \
+  include/linux/list_bl.h \
+  include/linux/bit_spinlock.h \
+  include/linux/lockref.h \
+    $(wildcard include/config/arch/use/cmpxchg/lockref.h) \
+  include/linux/stringhash.h \
+    $(wildcard include/config/dcache/word/access.h) \
+  include/linux/hash.h \
+    $(wildcard include/config/have/arch/hash.h) \
+  include/linux/path.h \
+  include/linux/list_lru.h \
+    $(wildcard include/config/memcg/kmem.h) \
+  include/linux/shrinker.h \
+  include/linux/capability.h \
+  include/uapi/linux/capability.h \
+  include/linux/semaphore.h \
+  include/linux/fcntl.h \
+    $(wildcard include/config/arch/32bit/off/t.h) \
+  include/uapi/linux/fcntl.h \
+  arch/arm/include/uapi/asm/fcntl.h \
+  include/uapi/asm-generic/fcntl.h \
+  include/uapi/linux/openat2.h \
+  include/linux/migrate_mode.h \
+  include/linux/percpu-rwsem.h \
+  include/linux/rcuwait.h \
+  include/linux/sched/signal.h \
+    $(wildcard include/config/sched/autogroup.h) \
+    $(wildcard include/config/bsd/process/acct.h) \
+    $(wildcard include/config/taskstats.h) \
+    $(wildcard include/config/stack/growsup.h) \
+  include/linux/signal.h \
+    $(wildcard include/config/proc/fs.h) \
+  include/linux/sched/jobctl.h \
+  include/linux/sched/task.h \
+    $(wildcard include/config/have/exit/thread.h) \
+    $(wildcard include/config/arch/wants/dynamic/task/struct.h) \
+    $(wildcard include/config/have/arch/thread/struct/whitelist.h) \
+  include/linux/uaccess.h \
+    $(wildcard include/config/set/fs.h) \
+  include/linux/fault-inject-usercopy.h \
+    $(wildcard include/config/fault/injection/usercopy.h) \
+  include/linux/instrumented.h \
+  arch/arm/include/asm/uaccess.h \
+    $(wildcard include/config/cpu/sw/domain/pan.h) \
+    $(wildcard include/config/cpu/use/domains.h) \
+    $(wildcard include/config/uaccess/with/memcpy.h) \
+  arch/arm/include/asm/domain.h \
+    $(wildcard include/config/io/36.h) \
+    $(wildcard include/config/cpu/cp15/mmu.h) \
+  arch/arm/include/generated/asm/extable.h \
+  include/asm-generic/extable.h \
+  include/linux/cred.h \
+    $(wildcard include/config/debug/credentials.h) \
+  include/linux/key.h \
+    $(wildcard include/config/key/notifications.h) \
+    $(wildcard include/config/net.h) \
+  include/linux/assoc_array.h \
+    $(wildcard include/config/associative/array.h) \
+  include/linux/sched/user.h \
+    $(wildcard include/config/fanotify.h) \
+    $(wildcard include/config/posix/mqueue.h) \
+    $(wildcard include/config/bpf/syscall.h) \
+    $(wildcard include/config/watch/queue.h) \
+  include/linux/rcu_sync.h \
+  include/linux/delayed_call.h \
+  include/linux/uuid.h \
+  include/uapi/linux/uuid.h \
+  include/linux/errseq.h \
+  include/linux/ioprio.h \
+  include/linux/sched/rt.h \
+  include/linux/iocontext.h \
+  include/linux/fs_types.h \
+  include/uapi/linux/fs.h \
+  include/uapi/linux/ioctl.h \
+  arch/arm/include/generated/uapi/asm/ioctl.h \
+  include/asm-generic/ioctl.h \
+  include/uapi/asm-generic/ioctl.h \
+  include/linux/quota.h \
+    $(wildcard include/config/quota/netlink/interface.h) \
+  include/linux/percpu_counter.h \
+  include/uapi/linux/dqblk_xfs.h \
+  include/linux/dqblk_v1.h \
+  include/linux/dqblk_v2.h \
+  include/linux/dqblk_qtree.h \
+  include/linux/projid.h \
+  include/uapi/linux/quota.h \
+  include/linux/nfs_fs_i.h \
+  include/linux/delay.h \
+  arch/arm/include/asm/delay.h \
+  include/linux/kfifo.h \
+  include/linux/scatterlist.h \
+    $(wildcard include/config/need/sg/dma/length.h) \
+    $(wildcard include/config/debug/sg.h) \
+    $(wildcard include/config/sgl/alloc.h) \
+    $(wildcard include/config/arch/no/sg/chain.h) \
+    $(wildcard include/config/sg/pool.h) \
+  include/linux/mm.h \
+    $(wildcard include/config/have/arch/mmap/rnd/bits.h) \
+    $(wildcard include/config/have/arch/mmap/rnd/compat/bits.h) \
+    $(wildcard include/config/mem/soft/dirty.h) \
+    $(wildcard include/config/arch/uses/high/vma/flags.h) \
+    $(wildcard include/config/arch/has/pkeys.h) \
+    $(wildcard include/config/ppc.h) \
+    $(wildcard include/config/x86.h) \
+    $(wildcard include/config/parisc.h) \
+    $(wildcard include/config/sparc64.h) \
+    $(wildcard include/config/arm64/mte.h) \
+    $(wildcard include/config/shmem.h) \
+    $(wildcard include/config/dev/pagemap/ops.h) \
+    $(wildcard include/config/device/private.h) \
+    $(wildcard include/config/pci/p2pdma.h) \
+    $(wildcard include/config/arch/has/pte/special.h) \
+    $(wildcard include/config/arch/has/pte/devmap.h) \
+    $(wildcard include/config/debug/vm/rb.h) \
+    $(wildcard include/config/page/poisoning.h) \
+    $(wildcard include/config/init/on/alloc/default/on.h) \
+    $(wildcard include/config/init/on/free/default/on.h) \
+    $(wildcard include/config/debug/pagealloc.h) \
+    $(wildcard include/config/arch/has/set/direct/map.h) \
+    $(wildcard include/config/hibernation.h) \
+    $(wildcard include/config/hugetlbfs.h) \
+    $(wildcard include/config/mapping/dirty/helpers.h) \
+  include/linux/mmap_lock.h \
+  include/linux/range.h \
+  include/linux/percpu-refcount.h \
+  include/linux/page_ext.h \
+  include/linux/stacktrace.h \
+    $(wildcard include/config/stacktrace.h) \
+    $(wildcard include/config/arch/stackwalk.h) \
+    $(wildcard include/config/have/reliable/stacktrace.h) \
+  include/linux/stackdepot.h \
+  include/linux/page_ref.h \
+    $(wildcard include/config/debug/page/ref.h) \
+  include/linux/memremap.h \
+  include/linux/pgtable.h \
+    $(wildcard include/config/pgtable/levels.h) \
+    $(wildcard include/config/highpte.h) \
+    $(wildcard include/config/have/arch/transparent/hugepage/pud.h) \
+    $(wildcard include/config/have/arch/soft/dirty.h) \
+    $(wildcard include/config/arch/enable/thp/migration.h) \
+    $(wildcard include/config/have/arch/huge/vmap.h) \
+    $(wildcard include/config/x86/espfix64.h) \
+  arch/arm/include/asm/pgtable.h \
+  arch/arm/include/asm/proc-fns.h \
+    $(wildcard include/config/big/little.h) \
+    $(wildcard include/config/harden/branch/predictor.h) \
+  arch/arm/include/asm/glue-proc.h \
+    $(wildcard include/config/cpu/arm7tdmi.h) \
+    $(wildcard include/config/cpu/arm720t.h) \
+    $(wildcard include/config/cpu/arm740t.h) \
+    $(wildcard include/config/cpu/arm9tdmi.h) \
+    $(wildcard include/config/cpu/arm920t.h) \
+    $(wildcard include/config/cpu/arm922t.h) \
+    $(wildcard include/config/cpu/arm925t.h) \
+    $(wildcard include/config/cpu/arm926t.h) \
+    $(wildcard include/config/cpu/arm940t.h) \
+    $(wildcard include/config/cpu/arm946e.h) \
+    $(wildcard include/config/cpu/arm1020.h) \
+    $(wildcard include/config/cpu/arm1020e.h) \
+    $(wildcard include/config/cpu/arm1022.h) \
+    $(wildcard include/config/cpu/arm1026.h) \
+    $(wildcard include/config/cpu/mohawk.h) \
+    $(wildcard include/config/cpu/feroceon.h) \
+    $(wildcard include/config/cpu/v6k.h) \
+    $(wildcard include/config/cpu/pj4b.h) \
+    $(wildcard include/config/cpu/v7.h) \
+  include/asm-generic/pgtable-nopud.h \
+  include/asm-generic/pgtable-nop4d.h \
+  arch/arm/include/asm/pgtable-hwdef.h \
+  arch/arm/include/asm/pgtable-2level-hwdef.h \
+  arch/arm/include/asm/tlbflush.h \
+    $(wildcard include/config/smp/on/up.h) \
+    $(wildcard include/config/cpu/tlb/v4wt.h) \
+    $(wildcard include/config/cpu/tlb/fa.h) \
+    $(wildcard include/config/cpu/tlb/v4wbi.h) \
+    $(wildcard include/config/cpu/tlb/feroceon.h) \
+    $(wildcard include/config/cpu/tlb/v4wb.h) \
+    $(wildcard include/config/cpu/tlb/v6.h) \
+    $(wildcard include/config/cpu/tlb/v7.h) \
+    $(wildcard include/config/arm/errata/720789.h) \
+    $(wildcard include/config/arm/errata/798181.h) \
+  arch/arm/include/asm/pgtable-2level.h \
+  include/asm-generic/pgtable_uffd.h \
+    $(wildcard include/config/have/arch/userfaultfd/wp.h) \
+  include/linux/huge_mm.h \
+  include/linux/sched/coredump.h \
+    $(wildcard include/config/core/dump/default/elf/headers.h) \
+  include/linux/vmstat.h \
+    $(wildcard include/config/vm/event/counters.h) \
+    $(wildcard include/config/debug/tlbflush.h) \
+    $(wildcard include/config/debug/vm/vmacache.h) \
+  include/linux/vm_event_item.h \
+    $(wildcard include/config/memory/balloon.h) \
+    $(wildcard include/config/balloon/compaction.h) \
+  arch/arm/include/asm/io.h \
+    $(wildcard include/config/pci.h) \
+    $(wildcard include/config/need/mach/io/h.h) \
+    $(wildcard include/config/pcmcia/soc/common.h) \
+    $(wildcard include/config/isa.h) \
+    $(wildcard include/config/pccard.h) \
+  include/asm-generic/pci_iomap.h \
+    $(wildcard include/config/no/generic/pci/ioport/map.h) \
+    $(wildcard include/config/generic/pci/iomap.h) \
+  include/asm-generic/io.h \
+    $(wildcard include/config/generic/iomap.h) \
+    $(wildcard include/config/generic/ioremap.h) \
+    $(wildcard include/config/has/ioport/map.h) \
+    $(wildcard include/config/virt/to/bus.h) \
+  include/linux/logic_pio.h \
+    $(wildcard include/config/indirect/pio.h) \
+  include/linux/fwnode.h \
+  include/linux/vmalloc.h \
+    $(wildcard include/config/kasan/vmalloc.h) \
+  arch/arm/include/asm/vmalloc.h \
+  include/linux/leds.h \
+    $(wildcard include/config/leds/triggers.h) \
+    $(wildcard include/config/leds/brightness/hw/changed.h) \
+    $(wildcard include/config/leds/trigger/disk.h) \
+    $(wildcard include/config/leds/trigger/mtd.h) \
+    $(wildcard include/config/leds/trigger/camera.h) \
+    $(wildcard include/config/new/leds.h) \
+    $(wildcard include/config/leds/trigger/cpu.h) \
+    $(wildcard include/config/leds/trigger/audio.h) \
+  include/dt-bindings/leds/common.h \
+  /home/cba52/cmpt433/public/as4/include/morseEncodings.h \
 
-/home/cba52/cmpt433/public/as4/morseLED.mod.o: $(deps_/home/cba52/cmpt433/public/as4/morseLED.mod.o)
+/home/cba52/cmpt433/public/as4/morse-code.o: $(deps_/home/cba52/cmpt433/public/as4/morse-code.o)
 
-$(deps_/home/cba52/cmpt433/public/as4/morseLED.mod.o):
+$(deps_/home/cba52/cmpt433/public/as4/morse-code.o):

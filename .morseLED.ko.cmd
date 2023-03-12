@@ -1,1 +1,0 @@
-cmd_/home/cba52/cmpt433/public/as4/morseLED.ko := arm-linux-gnueabihf-ld -r -EL -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/cba52/cmpt433/public/as4/morseLED.ko /home/cba52/cmpt433/public/as4/morseLED.o /home/cba52/cmpt433/public/as4/morseLED.mod.o;  true

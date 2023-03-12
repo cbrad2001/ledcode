@@ -1,0 +1,1 @@
+cmd_/home/cba52/cmpt433/public/as4/morse-code.ko := arm-linux-gnueabihf-ld -r -EL -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/cba52/cmpt433/public/as4/morse-code.ko /home/cba52/cmpt433/public/as4/morse-code.o /home/cba52/cmpt433/public/as4/morse-code.mod.o;  true
