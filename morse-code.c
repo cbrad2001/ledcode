@@ -13,6 +13,7 @@
 #include <linux/kfifo.h>
 #include <linux/leds.h>
 #include <linux/string.h>
+#include <linux/ctype.h>
 //#error Are we building this?	//debugging
 
 
@@ -65,7 +66,7 @@ static void led_unregister(void)	// Cleanup
 
 
 /******************************************************
- * Callbacks
+ * Helper Functions
  ******************************************************/
 static short decipher_led_code(char ch)
 {
@@ -88,14 +89,44 @@ static short decipher_led_code(char ch)
 	return 0;	//all else
 }
 
+// Taken from https://stackoverflow.com/questions/122616/how-do-i-trim-leading-trailing-whitespace-in-a-standard-way
+// Function to remove leading and trailing whitespace
+// Note that this function modifies original sting by removing trailing whitespace.
+static char *trimwhitespace(char *str)
+{
+   	char *end;
+
+   	// Trim leading space
+   	while(isspace((unsigned char)*str)) str++;
+
+  	if(*str == 0)  // All spaces?
+    	return str;
+
+  	// Trim trailing space
+  	end = str + strlen(str) - 1;
+  	while(end > str && isspace((unsigned char)*end)) end--;
+
+  	// Write new null terminator character
+  	end[1] = '\0';
+
+  	return str;
+}
+
+/******************************************************
+ * Callbacks
+ ******************************************************/
+
 // Called when user space application tries to write to the character device
 // Eg: echo "hi" | sudo tee /dev/morse-code
 static ssize_t my_write(struct file* file, const char *buff, size_t count, loff_t* ppos)
 {
+	int maxStringLength = count < KERNEL_BUFF_SIZE ? count : KERNEL_BUFF_SIZE;
+
 	int i = 0, deciphered = 0;
 	char kernelBuff[KERNEL_BUFF_SIZE];
+	char *trimmedString = NULL;
 	memset(kernelBuff, 0, KERNEL_BUFF_SIZE);
-	printk(KERN_INFO "demo_ledtrig: Flashing %d times for string.\n", count);
+	printk(KERN_INFO "demo_ledtrig: Flashing %d times for string.\n", maxStringLength);
 
 	//blocking call, returns only after flashing done.
 	// flash message to LED (loop characters in input, decipher flash code)
@@ -103,7 +134,7 @@ static ssize_t my_write(struct file* file, const char *buff, size_t count, loff_
 	//  dot/dash is separated by one dot-time. During this time the LED is off.
 	// Two letters in a message are separated by three dot-times. During this time the LED is off.
 	// Each break between words is equal to seven dot-times total (no additional 3 dot-time inter-character delay).
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < maxStringLength; i++) {
 		// char ch;
 		if (copy_from_user(&kernelBuff[i], &buff[i],sizeof(char))>0){	//loop thru all characters in input
 			printk(KERN_INFO "ERROR: Unable to read byte %d",i);
@@ -126,9 +157,11 @@ static ssize_t my_write(struct file* file, const char *buff, size_t count, loff_
 		// //2 letters seperated by 3 dot times::
 		// msleep(DOT_UNIT*3);
 	}
+	printk(KERN_INFO "String copied over to kernel space: |%s|", kernelBuff);
 
-	printk(KERN_INFO "String copied over to kernel space: %s", kernelBuff);
+	trimmedString = trimwhitespace(kernelBuff); // removes trailing whitespace from kernelBuff
 	printk(KERN_INFO "Copied %d bytes over to kernelBuff.", count);
+	printk(KERN_INFO "String after trimming: |%s|", trimmedString);
 
 	//TODO
 
