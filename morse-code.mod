@@ -1,2 +1,2 @@
-/home/cba52/cmpt433/public/as4/morse-code.o
+/home/myvm/cmpt433/work/as4/morse-code.o
 
