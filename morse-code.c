@@ -31,6 +31,12 @@
 
 #define KERNEL_BUFF_SIZE 500
 
+#define DOT_MASK 0x8000     // 1000 0000 0000 0000 in binary
+#define DASH_MASK 0xE000    // 1110 0000 0000 0000 in binary
+
+#define IS_WHITESPACE -1
+#define IS_NOTALPHA -2
+
 static DECLARE_KFIFO(queue,char,FIFO_SIZE);
 
 /******************************************************
@@ -79,14 +85,13 @@ static short decipher_led_code(char ch)
 	if(ch>='A' && ch<='Z')
 		return morsecode_codes[ch-'A'];
 	
-	// Trim whitespace from the front and end of the input. Whitespace is ‘ ’, ‘\n’, ‘\r’, ‘\t’. 
 	// Identify the breaks between words by 1 or more whitespace between characters.
 	if (ch == ' ' || ch == '\n' || ch == '\t' || ch == '\r')
 	{
-		return 0;
+		return IS_WHITESPACE;
 	}
 
-	return 0;	//all else
+	return IS_NOTALPHA;	//all else
 }
 
 // Taken from https://stackoverflow.com/questions/122616/how-do-i-trim-leading-trailing-whitespace-in-a-standard-way
@@ -112,6 +117,61 @@ static char *trimwhitespace(char *str)
   	return str;
 }
 
+// Taken from https://stackoverflow.com/questions/17770202/remove-extra-whitespace-from-a-string-in-c
+// Function to trim extra whitespace characters in between words.
+void strip_extra_spaces(char* str) {
+  	int i, x;
+  	for(i=x=0; str[i]; ++i)
+    	if(!isspace(str[i]) || (i > 0 && !isspace(str[i-1])))
+      	str[x++] = str[i];
+  	str[x] = '\0';
+}
+
+// Takes in an encoded hex encoding and converts it to ASCII morse code which will
+// then get pushed into the KFIFO
+static int convert_to_morse(short deciphered)
+{
+	if (deciphered == IS_WHITESPACE) {
+		// put three spaces into the kfifo here
+		int i;
+		for (i = 0; i < 2; i++) {
+			if (!kfifo_put(&queue, ' ')) {
+				return -EFAULT;
+			}
+		}
+	}
+	else if (deciphered != IS_NOTALPHA) {
+		// check the MSB if it is a dash, where if it is not then it is a dot
+		// after checking, left shift by 4 if it is a dash and 2 if it is a dot
+		// repeat until the value to check is a zero
+		while (deciphered != 0) {
+			if ((deciphered & DASH_MASK) == DASH_MASK) {
+				// put a dash into kfifo here
+				if (!kfifo_put(&queue, '-')) {
+					return -EFAULT;
+				}
+				deciphered = deciphered << 4;
+			}
+			else if ((deciphered & DOT_MASK) == DOT_MASK){
+				// put a dot into kfifo here
+				if (!kfifo_put(&queue, '.')) {
+					return -EFAULT;
+				}
+				deciphered = deciphered << 2;
+			}
+			else {
+				printk(KERN_ERR "Failed to decipher bit sequence as either a dot or a dash.");
+				return -EFAULT;
+			}
+		}
+		// put a single space into the kfifo here (after letter)
+		if (!kfifo_put(&queue, ' ')) {
+			return -EFAULT;
+		}
+	}
+	return 0;
+}
+
 /******************************************************
  * Callbacks
  ******************************************************/
@@ -135,33 +195,27 @@ static ssize_t my_write(struct file* file, const char *buff, size_t count, loff_
 	// Two letters in a message are separated by three dot-times. During this time the LED is off.
 	// Each break between words is equal to seven dot-times total (no additional 3 dot-time inter-character delay).
 	for (i = 0; i < maxStringLength; i++) {
-		// char ch;
 		if (copy_from_user(&kernelBuff[i], &buff[i],sizeof(char))>0){	//loop thru all characters in input
 			printk(KERN_INFO "ERROR: Unable to read byte %d",i);
 			return -EFAULT;
 		}
-		deciphered = decipher_led_code(kernelBuff[i]);					//determine flash code for each letter & skip spaces
-
-		// // Flash LEDs
-		// printk(KERN_INFO "Next character (%d) = %c\n",i,kernelBuff[i]);
-		
-		// if (deciphered == 1)							// on for letter
-		// {
-		// 	my_led_on();
-		// }
-		// else												// off for whitespace/non-letter
-		// {
-		// 	my_led_off();
-		// }
-
-		// //2 letters seperated by 3 dot times::
-		// msleep(DOT_UNIT*3);
 	}
 	printk(KERN_INFO "String copied over to kernel space: |%s|", kernelBuff);
 
 	trimmedString = trimwhitespace(kernelBuff); // removes trailing whitespace from kernelBuff
+	strip_extra_spaces(trimmedString); // removes consecutive white spaces in string
 	printk(KERN_INFO "Copied %d bytes over to kernelBuff.", count);
 	printk(KERN_INFO "String after trimming: |%s|", trimmedString);
+
+	for (i = 0; i < strlen(trimmedString); i ++) {
+		deciphered = decipher_led_code(trimmedString[i]);
+		convert_to_morse(deciphered);
+	}
+
+	// After processing entire message, append a new line to the kfifo
+	if (!kfifo_put(&queue, '\n')) {
+		return -EFAULT;
+	}
 
 	//TODO
 
@@ -183,7 +237,6 @@ static ssize_t my_read(struct file *file, char *buf, size_t count, loff_t *f_pos
 
 	//return bytes actually read
 	return bytes_read;
-
 }
 
 
