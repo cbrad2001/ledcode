@@ -20,6 +20,9 @@
 //
 // Between characters, must have 3-dot times (total) of off (0's) (not encoded here)
 // Between words, must have 7-dot times (total) of off (0's) (not encoded here).
+
+#define DOT_MASK 0x8000     // 1000 0000 0000 0000 in binary
+#define DASH_MASK 0xE000    // 1110 0000 0000 0000 in binary
 //
 static unsigned short morsecode_codes[] = {
 		0xB800,	// A 1011 1

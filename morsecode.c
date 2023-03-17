@@ -1,7 +1,5 @@
 /*
- * demo_ledtrig.c
- * - Demonstrate how to flash an LED using a custom trigger.
- *      Author: Brian Fraser
+ * Code 
  */
 #include <linux/module.h>
 #include <linux/miscdevice.h>		// for misc-driver calls.
@@ -16,23 +14,22 @@
 #include <linux/ctype.h>
 //#error Are we building this?	//debugging
 
-
 #include "include/morseEncodings.h"
-// info:
-
-// "dot" is the basic unit of time; we’ll use 200 ms.
-// "dash" is three dot-times long.
 
 #define MY_DEVICE_FILE "morse-code"
 #define FIFO_SIZE 256
 
+// "dot" is the basic unit of time; we’ll use 200 ms.
+// "dash" is three dot-times long.
 #define DOT_UNIT 200 	//time in ms
 #define DASH_UNIT (3*DOT_UNIT)
 
-#define KERNEL_BUFF_SIZE 500
+enum morse{
+	DOT,
+	DASH
+};
 
-#define DOT_MASK 0x8000     // 1000 0000 0000 0000 in binary
-#define DASH_MASK 0xE000    // 1110 0000 0000 0000 in binary
+#define KERNEL_BUFF_SIZE 500
 
 #define IS_WHITESPACE -1
 #define IS_NOTALPHA -2
@@ -42,44 +39,52 @@ static DECLARE_KFIFO(queue,char,FIFO_SIZE);
 /******************************************************
  * LED
  ******************************************************/
-DEFINE_LED_TRIGGER(morse_led_trigger);
+DEFINE_LED_TRIGGER(morse_code);
 
 #define LED_ON_TIME_ms 100
 #define LED_OFF_TIME_ms 900
 
-static void my_led_on(void)
+//turns LED off
+static void my_led_off(void)
 {
-	led_trigger_event(morse_led_trigger, LED_FULL);
+	led_trigger_event(morse_code, LED_OFF);
 	msleep(DOT_UNIT);
 }
 
-static void my_led_off(void)
+// Turns the LED on and sleeps for the corresponding morse entry's time
+static void my_led_on(enum morse status)
 {
-	led_trigger_event(morse_led_trigger, LED_OFF);
-	msleep(DOT_UNIT);
+	led_trigger_event(morse_code, LED_FULL);
+	if (status == DOT)
+		msleep(DOT_UNIT);
+	else
+		msleep(DASH_UNIT);
+
+	my_led_off();	//after blinking turn off
 }
 
 static void led_register(void)		// Setup the trigger's name:
 {
-	led_trigger_register_simple("morse-code", &morse_led_trigger);
+	led_trigger_register_simple("morse-code", &morse_code);
 }
 
 static void led_unregister(void)	// Cleanup
 {
-	led_trigger_unregister_simple(morse_led_trigger);
-	led_trigger_event(morse_led_trigger, LED_OFF);
+	led_trigger_unregister_simple(morse_code);
+	led_trigger_event(morse_code, LED_OFF);
 }
 
 
 /******************************************************
  * Helper Functions
  ******************************************************/
+// returns the encoding corresponding to an input character, whitespace or anything else
 static short decipher_led_code(char ch)
 {
 	// Skip (with no delay) any character which is not a letter (a-z, or A-Z) or whitespace. 
 	// (i.e., 'Hi There' should flash the same as '!H_I th_ER&e@#09.,-5%!' • 
 
-	if (ch >= 'a' && ch <= 'z')
+	if (ch >= 'a' && ch <= 'z')				//treats characters like integers to seach the right ASCII in the encodings
 		return morsecode_codes[ch-'a'];
 
 	if(ch>='A' && ch<='Z')
@@ -145,14 +150,20 @@ static int convert_to_morse(short deciphered)
 		// after checking, left shift by 4 if it is a dash and 2 if it is a dot
 		// repeat until the value to check is a zero
 		while (deciphered != 0) {
+
+			// CONVERTS INTO A DASH, Adds Dash to queue, calls corresponding blink
 			if ((deciphered & DASH_MASK) == DASH_MASK) {
+				my_led_on(DASH);
 				// put a dash into kfifo here
 				if (!kfifo_put(&queue, '-')) {
 					return -EFAULT;
 				}
 				deciphered = deciphered << 4;
 			}
+
+			// CONVERTS TO A DOT, adds dot to queue, calls corresponding blink
 			else if ((deciphered & DOT_MASK) == DOT_MASK){
+				my_led_on(DOT);
 				// put a dot into kfifo here
 				if (!kfifo_put(&queue, '.')) {
 					return -EFAULT;
@@ -163,6 +174,7 @@ static int convert_to_morse(short deciphered)
 				printk(KERN_ERR "Failed to decipher bit sequence as either a dot or a dash.");
 				return -EFAULT;
 			}
+			// my_led_off();		// after each letter the LED goes off to brace for the next call
 		}
 		// put a single space into the kfifo here (after letter)
 		if (!kfifo_put(&queue, ' ')) {
@@ -207,6 +219,8 @@ static ssize_t my_write(struct file* file, const char *buff, size_t count, loff_
 	printk(KERN_INFO "Copied %d bytes over to kernelBuff.", count);
 	printk(KERN_INFO "String after trimming: |%s|", trimmedString);
 
+	//loop through all characters in the input buffer, determining the flash code for each letter, 
+	// and then flashing it out to the LED(s).
 	for (i = 0; i < strlen(trimmedString); i ++) {
 		deciphered = decipher_led_code(trimmedString[i]);
 		convert_to_morse(deciphered);
@@ -229,6 +243,11 @@ static ssize_t my_read(struct file *file, char *buf, size_t count, loff_t *f_pos
 {
 	//fill user buffer with data...
 	int bytes_read = 0;
+
+	// need: case where no data available, returns 0 bytes
+	// return 0;
+
+	// case where read buffer is smaller than data being read
 	if (kfifo_to_user(&queue, buf, count, &bytes_read)){
 		return -EFAULT;
 	}

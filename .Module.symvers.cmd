@@ -1,1 +1,0 @@
-cmd_/home/cba52/cmpt433/public/as4/Module.symvers := sed 's/ko$$/o/' /home/cba52/cmpt433/public/as4/modules.order | scripts/mod/modpost -m    -o /home/cba52/cmpt433/public/as4/Module.symvers -e -i Module.symvers   -T -
