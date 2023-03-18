@@ -81,14 +81,14 @@ static void led_unregister(void)	// Cleanup
 // returns the encoding corresponding to an input character, whitespace or anything else
 static short decipher_led_code(char ch)
 {
+	char lowercaseID = 'a', uppercaseID = 'A';	// subtract to key into right code sequence
 	// Skip (with no delay) any character which is not a letter (a-z, or A-Z) or whitespace. 
 	// (i.e., 'Hi There' should flash the same as '!H_I th_ER&e@#09.,-5%!' • 
-
-	if (ch >= 'a' && ch <= 'z')				//treats characters like integers to seach the right ASCII in the encodings
-		return morsecode_codes[ch-'a'];
+	if (ch >= 'a' && ch <= 'z')					
+		return morsecode_codes[ch-lowercaseID];	//treats characters like integers to seach the right ASCII in the encodings
 
 	if(ch>='A' && ch<='Z')
-		return morsecode_codes[ch-'A'];
+		return morsecode_codes[ch-uppercaseID];
 	
 	// Identify the breaks between words by 1 or more whitespace between characters.
 	if (ch == ' ' || ch == '\n' || ch == '\t' || ch == '\r')
@@ -174,7 +174,6 @@ static int convert_to_morse(short deciphered)
 				printk(KERN_ERR "Failed to decipher bit sequence as either a dot or a dash.");
 				return -EFAULT;
 			}
-			// my_led_off();		// after each letter the LED goes off to brace for the next call
 		}
 		// put a single space into the kfifo here (after letter)
 		if (!kfifo_put(&queue, ' ')) {
@@ -225,19 +224,16 @@ static ssize_t my_write(struct file* file, const char *buff, size_t count, loff_
 		deciphered = decipher_led_code(trimmedString[i]);
 		convert_to_morse(deciphered);
 	}
-
 	// After processing entire message, append a new line to the kfifo
 	if (!kfifo_put(&queue, '\n')) {
 		return -EFAULT;
 	}
-
-	//TODO
-
 	// Return # bytes actually written.
 	*ppos += count;
 	return count;
 }
 
+//TODO
 // Called when user space application tries to read the character device
 static ssize_t my_read(struct file *file, char *buf, size_t count, loff_t *f_pos)
 {
