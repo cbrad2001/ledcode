@@ -1,0 +1,157 @@
+debian@cba52-beagle:/mnt/remote/drivers$ uname -r
+5.10.140-ti-r52
+debian@cba52-beagle:/mnt/remote/drivers$ modinfo morsecode.ko
+filename:       /mnt/remote/drivers/morsecode.ko
+license:        GPL
+description:    A simple test driver
+author:         cba52 & jwa359
+depends:        
+name:           morsecode
+vermagic:       5.10.140 SMP preempt mod_unload modversions ARMv7 p2v8 
+debian@cba52-beagle:/mnt/remote/drivers$ sudo insmod morsecode.ko 
+debian@cba52-beagle:/mnt/remote/drivers$ cd /sys/class/leds/beaglebone:green:usr0 
+debian@cba52-beagle:/sys/class/leds/beaglebone:green:usr0$ echo morse-code | sudo tee trigger
+morse-code
+debian@cba52-beagle:/sys/class/leds/beaglebone:green:usr0$ cat trigger 
+none usb-gadget usb-host rfkill-any rfkill-none kbd-scrolllock kbd-numlock kbd-capslock kbd-kanalock kbd-shiftlock kbd-altgrlock kbd-ctrllock kbd-altlock kbd-shiftllock kbd-shiftrlock kbd-ctrlllock kbd-ctrlrlock timer oneshot disk-activity disk-read disk-write ide-disk mtd nand-disk heartbeat backlight gpio cpu cpu0 mmc1 activity default-on panic netdev mmc0 4a101000.mdio:00:link 4a101000.mdio:00:100Mbps 4a101000.mdio:00:10Mbps [morse-code]
+debian@cba52-beagle:/sys/class/leds/beaglebone:green:usr0$ cd /mnt/remote/drivers
+debian@cba52-beagle:/mnt/remote/drivers$ echo 'Hello world.' | sudo tee /dev/morse-code
+Hello world.
+debian@cba52-beagle:/mnt/remote/drivers$ sudo cat /dev/morse-code
+.... . .-.. .-.. ---   .-- --- .-. .-.. -.. 
+debian@cba52-beagle:/mnt/remote/drivers$ sudo rmmod morsecode 
+debian@cba52-beagle:/mnt/remote/drivers$ lsmod
+Module                  Size  Used by
+rpcsec_gss_krb5        28672  0
+pru_rproc              28672  0
+irq_pruss_intc         20480  0
+snd_soc_simple_card    24576  0
+snd_soc_simple_card_utils    24576  1 snd_soc_simple_card
+pm33xx                 20480  0
+pruss                  20480  1 pru_rproc
+ti_eqep                16384  0
+counter                20480  1 ti_eqep
+snd_soc_tlv320aic3x    53248  1
+snd_soc_davinci_mcasp    32768  2
+snd_soc_ti_udma        16384  1 snd_soc_davinci_mcasp
+c_can_platform         16384  0
+snd_soc_ti_edma        16384  1 snd_soc_davinci_mcasp
+c_can                  24576  1 c_can_platform
+snd_soc_ti_sdma        16384  1 snd_soc_davinci_mcasp
+can_dev                28672  1 c_can
+snd_soc_core          172032  7 snd_soc_davinci_mcasp,snd_soc_simple_card_utils,snd_soc_ti_sdma,snd_soc_ti_edma,snd_soc_tlv320aic3x,snd_soc_ti_udma,snd_soc_simple_card
+snd_pcm_dmaengine      16384  1 snd_soc_core
+snd_pcm                94208  4 snd_soc_davinci_mcasp,snd_pcm_dmaengine,snd_soc_core,snd_soc_tlv320aic3x
+snd_timer              32768  1 snd_pcm
+snd                    61440  3 snd_timer,snd_soc_core,snd_pcm
+soundcore              16384  1 snd
+evdev                  24576  1
+wkup_m3_ipc            20480  1 pm33xx
+uio_pdrv_genirq        20480  0
+uio                    20480  1 uio_pdrv_genirq
+cpufreq_dt             20480  0
+ip_tables              28672  0
+x_tables               28672  1 ip_tables
+spidev                 24576  0
+debian@cba52-beagle:/mnt/remote/drivers$ dmesg | tail -100
+[173055.491477] nfs: server 192.168.7.1 not responding, timed out
+[173214.363041] ----> morse-code driver init(): file /dev/morse-code.
+[173214.363111] sysfs: cannot create duplicate filename '/devices/virtual/misc/morse-code'
+[173214.363137] CPU: 0 PID: 3663 Comm: insmod Tainted: G        W  O      5.10.140-ti-r52 #1bullseye
+[173214.363146] Hardware name: Generic AM33XX (Flattened Device Tree)
+[173214.363195] [<c0110e08>] (unwind_backtrace) from [<c010c048>] (show_stack+0x10/0x14)
+[173214.363220] [<c010c048>] (show_stack) from [<c0ed751c>] (dump_stack+0x88/0x9c)
+[173214.363247] [<c0ed751c>] (dump_stack) from [<c040e660>] (sysfs_warn_dup+0x58/0x64)
+[173214.363263] [<c040e660>] (sysfs_warn_dup) from [<c040e798>] (sysfs_create_dir_ns+0xe8/0xfc)
+[173214.363281] [<c040e798>] (sysfs_create_dir_ns) from [<c0861d94>] (kobject_add_internal+0xb4/0x35c)
+[173214.363296] [<c0861d94>] (kobject_add_internal) from [<c0862588>] (kobject_add+0x5c/0xcc)
+[173214.363322] [<c0862588>] (kobject_add) from [<c09d0cd8>] (device_add+0xfc/0x7fc)
+[173214.363339] [<c09d0cd8>] (device_add) from [<c09d155c>] (device_create_groups_vargs+0xa0/0xbc)
+[173214.363354] [<c09d155c>] (device_create_groups_vargs) from [<c09d1610>] (device_create_with_groups+0x38/0x60)
+[173214.363372] [<c09d1610>] (device_create_with_groups) from [<c0922298>] (misc_register+0x180/0x1ac)
+[173214.363401] [<c0922298>] (misc_register) from [<bf0ee028>] (my_init+0x28/0x1000 [morsecode])
+[173214.363446] [<bf0ee028>] (my_init [morsecode]) from [<c0102170>] (do_one_initcall+0x40/0x2cc)
+[173214.363473] [<c0102170>] (do_one_initcall) from [<c01f4f58>] (do_init_module+0x44/0x254)
+[173214.363490] [<c01f4f58>] (do_init_module) from [<c01f7ac4>] (sys_finit_module+0xbc/0x120)
+[173214.363504] [<c01f7ac4>] (sys_finit_module) from [<c0100060>] (ret_fast_syscall+0x0/0x54)
+[173214.363514] Exception stack(0xc2d69fa8 to 0xc2d69ff0)
+[173214.363528] 9fa0:                   00000000 00000002 00000003 004662d0 00000000 00000001
+[173214.363542] 9fc0: 00000000 00000002 1245af00 0000017b 0146db20 00000000 00000002 be9067e4
+[173214.363552] 9fe0: be906608 be9065f8 0045eb0d b6d5e072
+[173214.363568] kobject_add_internal failed for morse-code with -EEXIST, don't try to register things with the same name in the same directory.
+[173214.382724] LED trigger morse-code failed to register (-17)
+[173231.430995] <---- morse-code driver exit().
+[173237.963195] ----> morse-code driver init(): file /dev/morse-code.
+[173478.654237] <---- morse-code driver exit().
+[173482.973761] ----> morse-code driver init(): file /dev/morse-code.
+[173495.519012] demo_ledtrig: Flashing 4 times for string.
+[173495.519039] String copied over to kernel space: |sos
+                |
+[173495.519049] Copied 4 bytes over to kernelBuff.
+[173495.519057] String after trimming: |sos|
+[173517.000269] morse::my_read(), buff size 131072, f_pos 0
+[173517.004367] morse::my_read(), buff size 131072, f_pos 0
+[173561.337678] morse::my_read(), buff size 131072, f_pos 0
+[173810.681966] demo_ledtrig: Flashing 4 times for string.
+[173810.681992] String copied over to kernel space: |sos
+                |
+[173810.682002] Copied 4 bytes over to kernelBuff.
+[173810.682009] String after trimming: |sos|
+[173818.845838] demo_ledtrig: Flashing 4 times for string.
+[173818.845865] String copied over to kernel space: |sos
+                |
+[173818.845874] Copied 4 bytes over to kernelBuff.
+[173818.845882] String after trimming: |sos|
+[174025.717119] <---- morse-code driver exit().
+[174038.953946] ----> morse-code driver init(): file /dev/morse-code.
+[174045.647962] demo_ledtrig: Flashing 4 times for string.
+[174045.647988] String copied over to kernel space: |sos
+                |
+[174045.647998] Copied 4 bytes over to kernelBuff.
+[174045.648005] String after trimming: |sos|
+[174056.895240] morse::my_read(), buff size 131072, f_pos 0
+[174056.896127] morse::my_read(), buff size 131072, f_pos 0
+[174063.251598] demo_ledtrig: Flashing 8 times for string.
+[174063.251626] String copied over to kernel space: |sos sos
+                |
+[174063.251636] Copied 8 bytes over to kernelBuff.
+[174063.251643] String after trimming: |sos sos|
+[174171.862443] morse::my_read(), buff size 131072, f_pos 0
+[174171.863329] morse::my_read(), buff size 131072, f_pos 0
+[174173.393839] morse::my_read(), buff size 131072, f_pos 0
+[174174.911888] morse::my_read(), buff size 131072, f_pos 0
+[174178.898952] demo_ledtrig: Flashing 8 times for string.
+[174178.898978] String copied over to kernel space: |sos sos
+                |
+[174178.898988] Copied 8 bytes over to kernelBuff.
+[174178.898995] String after trimming: |sos sos|
+[174389.433330] <---- morse-code driver exit().
+[174403.143559] ----> morse-code driver init(): file /dev/morse-code.
+[174405.253553] demo_ledtrig: Flashing 8 times for string.
+[174405.253579] String copied over to kernel space: |sos sos
+                |
+[174405.253589] Copied 8 bytes over to kernelBuff.
+[174405.253596] String after trimming: |sos sos|
+[174738.015377] demo_ledtrig: Flashing 8 times for string.
+[174738.015405] String copied over to kernel space: |sos sos
+                |
+[174738.015415] Copied 8 bytes over to kernelBuff.
+[174738.015422] String after trimming: |sos sos|
+[174859.217514] demo_ledtrig: Flashing 8 times for string.
+[174859.217542] String copied over to kernel space: |sos sos
+                |
+[174859.217553] Copied 8 bytes over to kernelBuff.
+[174859.217560] String after trimming: |sos sos|
+[174908.072289] <---- morse-code driver exit().
+[186109.083433] ----> morse-code driver init(): file /dev/morse-code.
+[186264.030828] <---- morse-code driver exit().
+[186274.829614] ----> morse-code driver init(): file /dev/morse-code.
+[186361.833795] demo_ledtrig: Flashing 13 times for string.
+[186361.833823] String copied over to kernel space: |Hello world.
+                |
+[186361.833833] Copied 13 bytes over to kernelBuff.
+[186361.833840] String after trimming: |Hello world.|
+[186401.573986] morse::my_read(), buff size 131072, f_pos 0
+[186401.578015] morse::my_read(), buff size 131072, f_pos 0
+[186411.002211] <---- morse-code driver exit().
+debian@cba52-beagle:/mnt/remote/drivers$ 
