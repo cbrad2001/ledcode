@@ -137,9 +137,10 @@ void strip_extra_spaces(char* str) {
 static int convert_to_morse(short deciphered)
 {
 	if (deciphered == IS_WHITESPACE) {
-		// put three spaces into the kfifo here
+		// put two spaces into the kfifo here
+		// since deciphering alphas already append a space to the end anyways
 		int i;
-		for (i = 0; i < 2; i++) {
+		for (i = 0; i < 1; i++) {
 			if (!kfifo_put(&queue, ' ')) {
 				return -EFAULT;
 			}
