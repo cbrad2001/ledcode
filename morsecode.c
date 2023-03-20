@@ -140,10 +140,15 @@ static int convert_to_morse(short deciphered)
 		// put two spaces into the kfifo here
 		// since deciphering alphas already append a space to the end anyways
 		int i;
-		for (i = 0; i < 1; i++) {
+		for (i = 0; i < 2; i++) {
 			if (!kfifo_put(&queue, ' ')) {
 				return -EFAULT;
 			}
+		}
+
+		// Each break between words is equal to seven dot-times total
+		for (i = 0; i < 7; i++) {
+			my_led_off();
 		}
 	}
 	else if (deciphered != IS_NOTALPHA) {
@@ -176,6 +181,12 @@ static int convert_to_morse(short deciphered)
 				return -EFAULT;
 			}
 		}
+
+		// Two letters in a message are separated by three dot-times. During this time the LED is off.
+		// my_led_off();
+		my_led_off();
+		my_led_off();
+
 		// put a single space into the kfifo here (after letter)
 		if (!kfifo_put(&queue, ' ')) {
 			return -EFAULT;
