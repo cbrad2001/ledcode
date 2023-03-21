@@ -289,6 +289,7 @@ static ssize_t my_read(struct file *file, char *buf, size_t count, loff_t *f_pos
 	}
 
 	printk(KERN_INFO "morse::my_read(), buff size %d, f_pos %d\n", (int)count, (int)*f_pos);
+	printk(KERN_INFO "bytes read is: %d", bytes_read);
 
 	//return bytes actually read
 	return bytes_read;
