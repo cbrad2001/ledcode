@@ -45,14 +45,18 @@ DEFINE_LED_TRIGGER(morse_code);
 #define LED_OFF_TIME_ms 900
 
 //turns LED off
-static void my_led_off(void)
+static void my_led_off(short isDoneDeciphering)
 {
 	led_trigger_event(morse_code, LED_OFF);
-	msleep(DOT_UNIT);
+
+	// don't sleep if it is the last morse symbol in the letter
+	if (!isDoneDeciphering) {
+		msleep(DOT_UNIT);
+	}
 }
 
 // Turns the LED on and sleeps for the corresponding morse entry's time
-static void my_led_on(enum morse status)
+static void my_led_on(enum morse status, short isDoneDeciphering)
 {
 	led_trigger_event(morse_code, LED_FULL);
 	if (status == DOT)
@@ -60,7 +64,12 @@ static void my_led_on(enum morse status)
 	else
 		msleep(DASH_UNIT);
 
-	my_led_off();	//after blinking turn off
+	if (!isDoneDeciphering) {
+		my_led_off(0);	//after blinking turn off
+	}
+	else {
+		my_led_off(1); // 1 for ignoring the sleep
+	}
 }
 
 static void led_register(void)		// Setup the trigger's name:
@@ -134,7 +143,7 @@ void strip_extra_spaces(char* str) {
 
 // Takes in an encoded hex encoding and converts it to ASCII morse code which will
 // then get pushed into the KFIFO
-static int convert_to_morse(short deciphered)
+static int convert_to_morse(short deciphered, short isLastLetter)
 {
 	if (deciphered == IS_WHITESPACE) {
 		// put two spaces into the kfifo here
@@ -148,7 +157,7 @@ static int convert_to_morse(short deciphered)
 
 		// Each break between words is equal to seven dot-times total
 		for (i = 0; i < 7; i++) {
-			my_led_off();
+			my_led_off(0);
 		}
 	}
 	else if (deciphered != IS_NOTALPHA) {
@@ -159,22 +168,34 @@ static int convert_to_morse(short deciphered)
 
 			// CONVERTS INTO A DASH, Adds Dash to queue, calls corresponding blink
 			if ((deciphered & DASH_MASK) == DASH_MASK) {
-				my_led_on(DASH);
 				// put a dash into kfifo here
 				if (!kfifo_put(&queue, '-')) {
 					return -EFAULT;
 				}
 				deciphered = deciphered << 4;
+
+				if (deciphered == 0) {
+					my_led_on(DASH, 1);
+				}
+				else {
+					my_led_on(DASH, 0);
+				}
 			}
 
 			// CONVERTS TO A DOT, adds dot to queue, calls corresponding blink
 			else if ((deciphered & DOT_MASK) == DOT_MASK){
-				my_led_on(DOT);
 				// put a dot into kfifo here
 				if (!kfifo_put(&queue, '.')) {
 					return -EFAULT;
 				}
 				deciphered = deciphered << 2;
+
+				if (deciphered == 0) {
+					my_led_on(DOT, 1);
+				}
+				else {
+					my_led_on(DOT, 0);
+				}
 			}
 			else {
 				printk(KERN_ERR "Failed to decipher bit sequence as either a dot or a dash.");
@@ -183,13 +204,15 @@ static int convert_to_morse(short deciphered)
 		}
 
 		// Two letters in a message are separated by three dot-times. During this time the LED is off.
-		// my_led_off();
-		my_led_off();
-		my_led_off();
+		if (!isLastLetter) {
+			my_led_off(0);
+			my_led_off(0);
+			my_led_off(0);
 
-		// put a single space into the kfifo here (after letter)
-		if (!kfifo_put(&queue, ' ')) {
-			return -EFAULT;
+			// put a single space into the kfifo here (after letter)
+			if (!kfifo_put(&queue, ' ')) {
+				return -EFAULT;
+			}
 		}
 	}
 	return 0;
@@ -234,7 +257,12 @@ static ssize_t my_write(struct file* file, const char *buff, size_t count, loff_
 	// and then flashing it out to the LED(s).
 	for (i = 0; i < strlen(trimmedString); i ++) {
 		deciphered = decipher_led_code(trimmedString[i]);
-		convert_to_morse(deciphered);
+		if (i + 1 == strlen(trimmedString)) {
+			convert_to_morse(deciphered, 1);
+		}
+		else {
+			convert_to_morse(deciphered, 0);
+		}
 	}
 	// After processing entire message, append a new line to the kfifo
 	if (!kfifo_put(&queue, '\n')) {
