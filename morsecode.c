@@ -156,7 +156,8 @@ static int convert_to_morse(short deciphered, short isLastLetter)
 		}
 
 		// Each break between words is equal to seven dot-times total
-		for (i = 0; i < 7; i++) {
+		// After a letter is already 3 dot time so 4 more dot times for total of 7
+		for (i = 0; i < 4; i++) {
 			my_led_off(0);
 		}
 	}
